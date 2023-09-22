@@ -58,8 +58,6 @@ size_t List::size() const {
 	}
 }
 
-} // namespace pr
-
 std::ostream & operator<< (std::ostream & os, const pr::List & vec)
 {
 	os << "[";
@@ -69,4 +67,8 @@ std::ostream & operator<< (std::ostream & os, const pr::List & vec)
 	os << "]";
 	return os;
 }
+
+} // namespace pr
+
+
 
