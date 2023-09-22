@@ -1,4 +1,5 @@
-
+#include <stddef.h>
+#include "List.h"
 namespace pr {
 
 // ******************* Chainon
@@ -12,7 +13,7 @@ size_t Chainon::length() {
 	return length();
 }
 
-void Chainon::print (std::ostream & os) {
+void Chainon::print (std::ostream & os) const {
 	os << data ;
 	if (next != nullptr) {
 		os << ", ";
