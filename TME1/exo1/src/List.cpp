@@ -1,4 +1,3 @@
-
 #include <stddef.h>
 #include "List.h"
 namespace pr {
@@ -47,7 +46,7 @@ void List::push_front (const std::string& val) {
 	tete = new Chainon(val,tete);
 }
 
-bool empty() {
+bool List::empty() {
 	return tete == nullptr;
 }
 
