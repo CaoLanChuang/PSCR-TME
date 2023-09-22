@@ -1,4 +1,4 @@
-#include <stddef.h>
+#include <stddef.h>		//Fault : nullptr est define dans cette lib
 #include "List.h"
 namespace pr {
 
@@ -10,14 +10,14 @@ size_t Chainon::length() {
 	if (next != nullptr) {
 		len += next->length();
 	}
-	return len;
+	return len;	//Faut : si retuen length(), il est un recursive et il va cycle sans fin
 }
 
-void Chainon::print (std::ostream & os) const {
+void Chainon::print (std::ostream & os) const {		//Fault : Le nom de la fonction dans le fichier cpp doit être cohérent avec le nom de la fonction dans le fichier h.
 	os << data ;
 	if (next != nullptr) {
 		os << ", ";
-		next->print(os);
+		next->print(os);		//Fault : Si cette ligne de code est placée en dehors du jugement if, elle sera bloquée sur le pointeur nul et provoquera la fin anormale du programme.
 	}
 }
 
@@ -46,7 +46,7 @@ void List::push_front (const std::string& val) {
 	tete = new Chainon(val,tete);
 }
 
-bool List::empty() {
+bool List::empty() {			//Fault : Si on n'écrit pas List ::, il ne sera pas reconnu
 	return tete == nullptr;
 }
 
@@ -58,7 +58,7 @@ size_t List::size() const {
 	}
 }
 
-std::ostream & operator<< (std::ostream & os, const pr::List & vec)
+std::ostream & operator<< (std::ostream & os, const pr::List & vec)		//Fault : Cette fonction fait partie de l'espace de noms et ne doit pas être définie en dehors
 {
 	os << "[";
 	if (vec.tete != nullptr) {

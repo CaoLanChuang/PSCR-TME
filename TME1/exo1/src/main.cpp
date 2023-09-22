@@ -107,9 +107,9 @@ int main () {
 
 	
 	// Affiche à l'envers
-	for (i = list.size(); i > 0; i--)
+	for (i = list.size() ; i > 0; i--)	//Fault  : unsigned long long cant be negative
 	{
-		std::cout << "elt " << i - 1 << ": " << list[i-1] << std::endl;
+		std::cout << "elt " << i - 1<< ": " << list[i-1] << std::endl;
 	}
 
 	// liberer les char de la chaine
