@@ -76,7 +76,6 @@ std::ostream & operator<< (std::ostream & os, const pr::List & vec)		//Fault : C
 	return os;
 }
 
+
+
 } // namespace pr
-
-
-

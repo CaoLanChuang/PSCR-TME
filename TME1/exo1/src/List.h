@@ -40,11 +40,15 @@ public:
 	bool empty() ;
 
 	size_t size() const ;
+
 };
 
 
 std::ostream & operator << (std::ostream & os, const List & vec) ;
 
+
+
 } /* namespace pr */
+
 
 #endif /* SRC_LIST_H_ */
