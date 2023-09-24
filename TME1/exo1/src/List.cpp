@@ -17,7 +17,7 @@ void Chainon::print (std::ostream & os) const {		//Fault : Le nom de la fonction
 	os << data ;
 	if (next != nullptr) {
 		os << ", ";
-		next->print(os);		//Fault : Si cette ligne de code est placée en dehors du jugement if, elle sera bloquée sur le pointeur nul et provoquera la fin anormale du programme.
+		next->print(os);		//Fault : Si cette ligne de code est placée en dehors du jugement if, il sera bloquée sur le pointeur nul et provoquera la fin anormale du programme.
 	}
 }
 
