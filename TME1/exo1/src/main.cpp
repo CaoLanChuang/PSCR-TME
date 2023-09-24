@@ -31,10 +31,17 @@ void Chainon::print (std::ostream & os) const {
 // ******************  List
 const std::string & List::operator[] (size_t index) const  {
 	Chainon * it = tete;
+	
 	for (size_t i=0; i < index ; i++) {
 		it = it->next;
 	}
-	return it->data;
+
+	if (it == nullptr)
+	{
+		throw std::out_of_range("Out of Range !\n");
+	}
+	else	
+		return it->data;
 }
 
 void List::push_back (const std::string& val) {
