@@ -35,16 +35,20 @@ public:
 
 	void push_back (const std::string& val) ;
 
-	void push_front (const std::string& val);
+	void push_front (const std::string& val);		//Fault : Définition en double
 
 	bool empty() ;
 
 	size_t size() const ;
+
 };
 
 
 std::ostream & operator << (std::ostream & os, const List & vec) ;
 
+
+
 } /* namespace pr */
+
 
 #endif /* SRC_LIST_H_ */
