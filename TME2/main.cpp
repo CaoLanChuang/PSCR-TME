@@ -6,15 +6,17 @@ int main () {
 	ifstream input = ifstream("WarAndPeace.txt");		//读入文件
 
 	auto start = steady_clock::now();					//记录开始时间
-	std::cout << "Parsing War and Peace" << endl;			
+	std::cout << "Parsing War and Peace" << endl << endl;			
 	string word;										//下一个将被处理的词
 	
 	regex re( R"([^a-zA-Z])");							//识别异常字符的正则表达式
 	
 	int choice;
-	std::cout << "1. Ex2" << endl;
-	std::cout << "2. Ex3" << endl;
-	std::cout << "0. Exit" << endl;
+	std::cout << "1. Ex2 : Combien de mots different. " << endl;
+	std::cout << "2. Ex3 : Combien de mots different avec le nombre de occurrence" << endl;
+	std::cout << "3. Ex5 : Definir le Class HashMap et le utilise" << endl;
+	std::cout << "0. Exit" << endl << endl;
+	std::cout << "Give me your choice : " ;
 
 	cin >> choice;
 	
