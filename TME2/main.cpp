@@ -45,6 +45,7 @@ int main () {
               	<< duration_cast<milliseconds>(end - start).count()
               	<< "ms.\n";
 
+			cout << "Found a total of " << CountDifferentWorld.size() << " words different" << endl;
 			input.close();
 			break;
 		}
@@ -74,7 +75,7 @@ int main () {
     		std::cout << "Parsing took "
               	<< duration_cast<milliseconds>(end - start).count()
              	<< "ms.\n";
-			cout << "Found a total of " << CountDifferentWorld.size() << " words different" << endl;
+
 
 			for (size_t i = 0; i < CountDifferentWorld.size(); i ++)
 			{
