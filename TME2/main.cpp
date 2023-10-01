@@ -1,5 +1,6 @@
 #include "Vector.h"
 #include "VectorEx3.h"
+#include "HashMap.h"
 
 int main () {
 
@@ -52,12 +53,9 @@ int main () {
 			break;
 		}
 	
-		
-
 		case 2 : 
 		{
 			VectorEx3 CountDifferentWorld(1);
-
 
 			while (input >> word) 					//如果还能读入词
 			{								
@@ -99,6 +97,36 @@ int main () {
 			break;
 		}
 		
+		case 3:
+		{
+			HashMap CountDifferentWorld(1); 
+			
+			size_t cal = 0;
+			while (input >> word) 					//如果还能读入词
+			{								
+				
+				word = regex_replace ( word, re, "");			//消除标点符号和异常字符
+				transform(word.begin(),word.end(),word.begin(),::tolower);	//把所有单词全部转换成小写
+				
+				CountDifferentWorld.pushBack(word);
+				cal++;
+			}
+			input.close();
+			
+			std::cout << "Finished Parsing War and Peace" << endl;
+
+			auto end = steady_clock::now();
+    		std::cout << "Parsing took "
+              	<< duration_cast<milliseconds>(end - start).count()
+             	<< "ms.\n";
+
+			std::cout << cal << endl;
+
+
+			
+			break;
+		}
+
 		case 0 :
 			exit;
 	}
