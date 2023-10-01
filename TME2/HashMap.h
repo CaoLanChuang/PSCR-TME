@@ -28,8 +28,7 @@ class HashMap
 		{
 			this->alloc_sz = size;
 			sz = 0;
-			Map = vector<forward_list<HashItem>>(size);
-			
+			Map = vector<forward_list<HashItem>>(size);	
 		}
 
 		~HashMap()
@@ -40,6 +39,11 @@ class HashMap
 		size_t size()
 		{
 			return this->sz;
+		}
+
+		size_t alloc_size()
+		{
+			return this->alloc_sz;
 		}
 
 	    bool empty()
@@ -84,10 +88,12 @@ class HashMap
         		{	
 					if(!Map[i].empty())
 					{
-						HashItem item = Map[i].front();
-						size_t newHashCode = std::hash<string>{}(item.Key);
-						size_t newIndex = newHashCode % newAllocSize;
-						newMap[newIndex] = Map[i];
+						for (HashItem item : Map[i])
+						{
+							size_t newHashCode = std::hash<string>{}(item.Key);
+							size_t newIndex = newHashCode % newAllocSize;
+							newMap[newIndex].push_front(item);
+						}
 					}
         		}
         		alloc_sz = newAllocSize;	//更改alloc_sz
@@ -101,30 +107,24 @@ class HashMap
 			size_t hashCode = std::hash<string>{}(wd);
     		size_t index = hashCode % alloc_sz;
 
-			bool isInclude = false;						
+			bool isInclude = false;					
 	
-			if(Map[index].empty())							//格子是空的
-			{
-				Map[index].push_front(HashItem(wd, 1));		//占据了一个空格子
-				ensureCapacity(sz + 1);						//计算是否需要扩容，并且做相应的措施
-				sz++;										//长度+1
-			}
-			else											//格子里已经存过别的string了
-			{
-				for (HashItem& item : Map[index])
-    			{
-        			if (item.Key == wd)						//遍历整个list，确认有没有和我们现在的string一样的
-        			{
-            			item.Value++;						//如果有，那么计数+1，更改flah，跳出循环
-            			isInclude = true;
-            			break;
-        			}
-    			}	
-				if (!isInclude)								//如果没有，那么说明是个新的
-    			{
-        			Map[index].push_front(HashItem(wd, 1));	//直接加在list后面，但是不需要扩容，因为这个格子已经存在了。
-    			}
-			}	
+			for (HashItem& item : Map[index])
+    		{
+        		if (item.Key == wd)						//遍历整个list，确认有没有和我们现在的string一样的
+        		{
+            		item.Value++;						//如果有，那么计数+1，更改flah，跳出循环
+            		isInclude = true;
+            		break;
+        		}
+    		}	
+			if (!isInclude)								//如果没有，那么说明是个新的
+    		{
+        		Map[index].push_front(HashItem(wd, 1));	//直接加在list后面，但是不需要扩容，因为这个格子已经存在了。
+				ensureCapacity(sz+1);
+				sz++;
+    		}
+				
 		}
 
 		int getValue(const string& wd) const
