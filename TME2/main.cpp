@@ -101,14 +101,12 @@ int main () {
 		{
 			HashMap CountDifferentWorld(1); 
 			
-			size_t cal = 0;
 			while (input >> word) 					//如果还能读入词
 			{								
 				
 				word = regex_replace ( word, re, "");			//消除标点符号和异常字符
 				transform(word.begin(),word.end(),word.begin(),::tolower);	//把所有单词全部转换成小写
-				
-				
+
 				CountDifferentWorld.pushBack(word);
 			}
 			input.close();
@@ -121,6 +119,38 @@ int main () {
 			std::cout << "Found a total of  " << CountDifferentWorld.getValue("peace") <<" fois de peace" << endl;
 			std::cout << "Found a total of  " << CountDifferentWorld.getValue("war") <<" fois de war" << endl;
 			std::cout << "Found a total of  " << CountDifferentWorld.getValue("toto") <<" fois de toto" << endl;
+			
+			vector<pair<string, int>> VecPair;
+
+
+			size_t indice = 0;
+			for (size_t i = 0; i < CountDifferentWorld.alloc_size(); i++)
+			{
+				for( HashMap::HashItem &item : CountDifferentWorld[i])
+				{
+					if (item.Key != "" || item.Value != 0)
+					{
+						pair<string, int> NewPair;
+						NewPair.first = item.Key;		//因为Map[i]里面的链表本身就是非空的，存在一个空白的HashItem
+						NewPair.second = item.Value;	//我们pushBack的时候只是把新的HashItem放到了它的前面，如果不加if
+						VecPair.emplace_back(NewPair);	//就会把空白值赋值出去导致错误	
+						indice++;											
+					}				
+				}
+			}
+			
+			cout << indice << endl;
+
+			std::sort(VecPair.begin(), VecPair.end(), 
+				[](const pair<string, int>& a, const pair<string, int>& b)
+				{
+					return a.second < b.second;
+				});
+
+			cout << VecPair[0].first<<" "<<VecPair[0].second << endl;
+			cout << VecPair[20332].first<<" "<<VecPair[20332].second << endl;
+			
+
 
 			
 			break;

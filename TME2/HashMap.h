@@ -11,19 +11,14 @@ using namespace std;
 using namespace std::chrono;
 class HashMap
 {
-	struct HashItem
-	{
-		const string Key;
-		int Value;
-		HashItem(const string& key, int value) : Key(key), Value(value) {}
-	};
-
-	private:
-		size_t sz;
-		size_t alloc_sz;
-		vector<std::forward_list<HashItem>> Map;
 	
 	public:
+		struct HashItem
+		{
+			const string Key;
+			int Value;
+			HashItem(const string& key, int value) : Key(key), Value(value) {}
+		};
 		HashMap(size_t size)
 		{
 			this->alloc_sz = size;
@@ -53,7 +48,7 @@ class HashMap
 
 		forward_list<HashItem>& operator[] (size_t index)
 		{
-			if (index < sz)
+			if (index < alloc_sz)
 			{
 				return Map[index];
 			}
@@ -66,7 +61,7 @@ class HashMap
 
 		const forward_list<HashItem>& operator[] (size_t index) const
 		{
-			if (index < sz)
+			if (index < alloc_sz)
 			{
 				return Map[index];
 			}
@@ -86,14 +81,11 @@ class HashMap
 			
         		for (size_t i = 0; i < alloc_sz; i++)
         		{	
-					if(!Map[i].empty())
+					for (HashItem item : Map[i])
 					{
-						for (HashItem item : Map[i])
-						{
-							size_t newHashCode = std::hash<string>{}(item.Key);
-							size_t newIndex = newHashCode % newAllocSize;
-							newMap[newIndex].push_front(item);
-						}
+						size_t newHashCode = std::hash<string>{}(item.Key);
+						size_t newIndex = newHashCode % newAllocSize;
+						newMap[newIndex].push_front(item);
 					}
         		}
         		alloc_sz = newAllocSize;	//更改alloc_sz
@@ -141,5 +133,11 @@ class HashMap
     		}												
     		return 0;									//没有就是0
 		}
+
+		private:
+		size_t sz;
+		size_t alloc_sz;
+		vector<std::forward_list<HashItem>> Map;
+
 
 };
