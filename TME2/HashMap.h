@@ -11,14 +11,18 @@ using namespace std;
 using namespace std::chrono;
 class HashMap
 {
-	
-	public:
+	private:
 		struct HashItem
 		{
 			const string Key;
 			int Value;
 			HashItem(const string& key, int value) : Key(key), Value(value) {}
 		};
+		size_t sz;
+		size_t alloc_sz;
+		vector<std::forward_list<HashItem>> Map;
+	
+	public:
 		HashMap(size_t size)
 		{
 			this->alloc_sz = size;
@@ -133,11 +137,5 @@ class HashMap
     		}												
     		return 0;									//没有就是0
 		}
-
-		private:
-		size_t sz;
-		size_t alloc_sz;
-		vector<std::forward_list<HashItem>> Map;
-
 
 };

@@ -126,7 +126,7 @@ int main () {
 			size_t indice = 0;
 			for (size_t i = 0; i < CountDifferentWorld.alloc_size(); i++)
 			{
-				for( HashMap::HashItem &item : CountDifferentWorld[i])
+				for( auto &item : CountDifferentWorld[i])
 				{
 					if (item.Key != "" || item.Value != 0)
 					{
