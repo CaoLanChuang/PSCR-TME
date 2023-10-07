@@ -196,12 +196,6 @@ class HashMap
             		return vit != other.vit || lit != other.lit;
         		}
 
-        		/*HashItem& operator*() 
-				{
-            		
-					return *lit;
-       			}*/
-				
 				std::pair<std::string, int> operator*() 
 				{
             		return std::make_pair(lit->Key, lit->Value);
@@ -217,6 +211,32 @@ class HashMap
     	iterator end() 
 		{
         	return iterator(Map, Map.size(), Map[Map.size()-1].end());
+		}
+
+		size_t count(iterator begin, iterator end) const
+		{
+			size_t size = 0;
+			while(begin != end)
+			{
+				++begin;
+				size++;
+			}
+			return size;
+		}
+
+
+		size_t count_if_equal(iterator begin, iterator end, const string& wd) const
+		{
+    		size_t count = 0;
+    		while (begin != end)
+    		{
+        		if ((*begin).first == wd)
+        		{
+           	 		count++;
+        		}
+        		++begin;
+    		}
+    		return count;
 		}
 
 };
