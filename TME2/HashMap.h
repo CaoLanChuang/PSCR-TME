@@ -138,4 +138,85 @@ class HashMap
     		return 0;									//没有就是0
 		}
 
+		//TME3
+		class iterator
+		{
+			private:
+				std::vector<forward_list<HashItem>>& buckets;
+				size_t vit;				//当前下标
+				typename std::forward_list<HashItem>::iterator lit;
+
+				void moveToNextNonEmptyBucket() 
+				{
+					if(vit < buckets.size())
+					{
+						++vit;
+            			while (vit < buckets.size() && buckets[vit].empty()) 
+						{
+                			++vit;
+            			}
+
+            			if (vit < buckets.size()) 
+						{
+                			lit = buckets[vit].begin();
+           		 		}
+					}
+            		
+        		}
+			
+			public:
+
+				iterator(std::vector<std::forward_list<HashItem>>& map, size_t currentBucket, typename std::forward_list<HashItem>::iterator currentElement) : buckets(map), vit(currentBucket), lit(currentElement) 
+				{
+            		// 在构造迭代器时初始化
+            		if (lit == buckets[vit].end()) 
+					{
+                		moveToNextNonEmptyBucket();
+            		}
+        		}
+
+
+        		iterator& operator++() 
+				{
+            		if (lit != buckets[vit].end()) 
+					{
+                		++lit;
+            		}
+
+            		while (vit < buckets.size() && lit == buckets[vit].end()) 
+					{
+                		moveToNextNonEmptyBucket();
+            		}
+
+            		return *this;
+        		}
+
+        		bool operator!=(const iterator& other) const 
+				{
+            		return vit != other.vit || lit != other.lit;
+        		}
+
+        		/*HashItem& operator*() 
+				{
+            		
+					return *lit;
+       			}*/
+				
+				std::pair<std::string, int> operator*() 
+				{
+            		return std::make_pair(lit->Key, lit->Value);
+        		}
+		};
+
+		iterator begin() 
+		{
+        	return iterator(Map, 0, Map[0].begin());
+			
+    	}
+
+    	iterator end() 
+		{
+        	return iterator(Map, Map.size(), Map[Map.size()-1].end());
+		}
+
 };

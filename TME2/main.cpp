@@ -139,7 +139,6 @@ int main () {
 				}
 			}
 			
-			cout << indice << endl;
 
 			std::sort(VecPair.begin(), VecPair.end(), 
 				[](const pair<string, int>& a, const pair<string, int>& b)
@@ -148,9 +147,45 @@ int main () {
 				});
 
 			cout << VecPair[0].first<<" "<<VecPair[0].second << endl;
-			cout << VecPair[20332].first<<" "<<VecPair[20332].second << endl;
+			cout << VecPair[indice-1].first<<" "<<VecPair[indice-1].second << endl << endl;
 			
+			//TME3
 
+			cout << "TME3" << endl << endl;
+
+			vector<pair<string, int>> VecPairTme3;
+			size_t indiceTME3 = 0;
+			
+			for (HashMap::iterator it = CountDifferentWorld.begin(); it != CountDifferentWorld.end(); ++it)
+			{
+				
+				VecPairTme3.push_back(*it);
+				indiceTME3 ++;
+				
+			}
+
+			for (size_t i = 0 ; i < indiceTME3; i ++)
+			{
+				if (VecPairTme3[i].first == "peace")
+				{
+					cout<<"Peace : " << VecPairTme3[i].second << endl;
+				}
+			}
+
+			std::sort(VecPairTme3.begin(), VecPairTme3.end(), 
+				[](const pair<string, int>& a, const pair<string, int>& b)
+				{
+					return a.second < b.second;
+				});
+
+			size_t calcul = 1;
+			while (calcul <= 10)
+			{
+				cout << VecPairTme3[indiceTME3 - calcul].first << endl;
+				calcul ++;
+			}
+
+			
 
 			
 			break;
