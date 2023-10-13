@@ -64,11 +64,14 @@ int main () {
         threads.emplace_back(transaction, std::ref(banque), i);		
     }
 
+    banque.effectuerBilan();
 
 	for (auto & t : threads) 
 	{
 		t.join();
+
 	}
+
 
 	
 
@@ -84,3 +87,15 @@ int main () {
 
 	return 0;
 }
+
+
+//Ex7
+/*
+Non.
+Les mutex utilisés dans les opérations de transfert empêcheront le thread comptable d'accéder aux comptes pendant que les transferts sont en cours.
+Cela peut entraîner un ralentissement du thread comptable et potentiellement bloquer ses opérations d'audit des comptes.
+
+Utilisation de mutex distincts : 
+Vous pouvez utiliser des mutex distincts pour les opérations de transfert et pour l'accès comptable. 
+Cela permettra au thread comptable d'accéder aux comptes sans bloquer les transferts.
+*/

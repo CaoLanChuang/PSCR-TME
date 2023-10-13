@@ -3,6 +3,7 @@
 #include "Compte.h"
 #include <vector>
 #include <iostream>
+#include <set>
 
 namespace pr {
 
@@ -16,6 +17,9 @@ namespace pr {
 			//Ex5
 			recursive_mutex transfertMutex;
 
+			std::set<Compte*> comptesVerifies; 	// 已核实的账户的集合
+    		std::mutex verifieMutex; 			// 用于已核实的集合的全局锁
+
 		public :
 			
 			//银行构造函数，ncomptes为账户数量，solde是每个账户的初始余额
@@ -27,11 +31,23 @@ namespace pr {
 
 				Compte &debiteur = comptes[deb];
     			Compte &crediteur = comptes[cred];
-				//Ex4。Ex6
+				//Ex4。Ex6。Ex9
 				//这里已经解决了Ex6的问题，因为我们已经上了全局锁来保证数据稳定
-				
+
 				unique_lock<recursive_mutex> transfertLock(transfertMutex);				//给全局锁上锁
     			unique_lock<recursive_mutex> debiteurLock(debiteur.getMutex());			//锁住转出账户
+
+				std::unique_lock<std::mutex> verifieGuard(verifieMutex);					//检查借出方账户是否已经核实
+
+				if (comptesVerifies.find(&debiteur) == comptesVerifies.end()) 
+				{
+					// 借方账户尚未被会计师核实，等待直到核实
+            		// 这个检查避免了死锁
+					verifieGuard.unlock();
+            		std::this_thread::sleep_for(std::chrono::milliseconds(10)); // 等待一段时间
+            		return transfert(deb, cred, val); 							// 重新尝试转账
+				}
+				
     			unique_lock<recursive_mutex> crediturLock(crediteur.getMutex());		//锁住收款人
 				//判断转出账户内是否有足够的存款，有则取出
 				if (debiteur.debiter(val)) 
@@ -70,5 +86,15 @@ namespace pr {
 			{
 				return this->comptes[index];
 			}
+
+			//Ex10
+			void effectuerBilan() 
+			{
+        		std::lock_guard<std::mutex> verrou(verifieMutex);
+        		for (auto& compte : comptes) 
+				{
+            		comptesVerifies.insert(&compte);
+        		}
+    		}
 	};
 }

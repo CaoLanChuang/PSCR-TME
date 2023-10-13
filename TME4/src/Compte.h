@@ -25,14 +25,14 @@ namespace pr
 			void crediter (unsigned int val)	//存款函数，
 			{
 				//Ex4
-				//unique_lock<mutex> g(m);		//unique-lock函数， 多个存款进程工共用这一个锁
+				unique_lock<recursive_mutex> g(m);		//unique-lock函数， 多个存款进程工共用这一个锁
 				solde+=val ;					//用于保证多线程下，存款数额不会异常
 			}
 
 			bool debiter (unsigned int val)		//取款函数
 			{
 				//Ex4
-				//unique_lock<mutex> g(m);		//多个取款函数共用一个互斥锁，保证余额正确
+				unique_lock<recursive_mutex> g(m);		//多个取款函数共用一个互斥锁，保证余额正确
 				bool doit = solde >= val;		//存款余额 > 取款数额才能取钱
 				if (doit) 
 				{
