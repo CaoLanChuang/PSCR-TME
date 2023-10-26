@@ -3,57 +3,98 @@
 
 #include <cstdlib>
 #include <mutex>
+#include <condition_variable>
 
 namespace pr {
 
 // MT safe version of the Queue, non blocking.
 template <typename T>
-class Queue {
+class Queue 
+{
 	T ** tab;
 	const size_t allocsize;
 	size_t begin;
 	size_t sz;
-	mutable std::mutex m;
+	mutable std::recursive_mutex m;
+	std::condition_variable_any cv;
+	bool isBlocking = true;
+	
 
 	// fonctions private, sans protection mutex
-	bool empty() const {
+	bool empty() const 
+	{
+		std::unique_lock<std::recursive_mutex> lg(m);
 		return sz == 0;
 	}
-	bool full() const {
+
+	bool full() const 
+	{
+		std::unique_lock<std::recursive_mutex> lg(m);
 		return sz == allocsize;
 	}
+
 public:
-	Queue(size_t size) :allocsize(size), begin(0), sz(0) {
+
+	Queue(size_t size) :allocsize(size), begin(0), sz(0) 
+	{
 		tab = new T*[size];
 		memset(tab, 0, size * sizeof(T*));
 	}
-	size_t size() const {
-		std::unique_lock<std::mutex> lg(m);
+
+	size_t size() const 
+	{
+		std::unique_lock<std::recursive_mutex> lg(m);
 		return sz;
 	}
-	T* pop() {
-		std::unique_lock<std::mutex> lg(m);
-		if (empty()) {
+
+	T* pop() 
+	{
+		std::unique_lock<std::recursive_mutex> lg(m);
+		if (empty() && isBlocking) 
+		{
+			cv.wait(lg);
+		}
+
+		if (!isBlocking && empty())
+		{
 			return nullptr;
 		}
+		
 		auto ret = tab[begin];
 		tab[begin] = nullptr;
 		sz--;
 		begin = (begin + 1) % allocsize;
 		return ret;
 	}
-	bool push(T* elt) {
-		std::unique_lock<std::mutex> lg(m);
-		if (full()) {
-			return false;
+
+	bool push(T* elt) 
+	{
+		std::unique_lock<std::recursive_mutex> lg(m);
+
+		while(empty())
+		{
+			cv.wait(lg);
 		}
+
+		
+		/*if (full()) 
+		{
+			return false;
+		}*/
+
+
+
 		tab[(begin + sz) % allocsize] = elt;
 		sz++;
+		if (sz==1) cv.notify_all();
 		return true;
 	}
-	~Queue() {
+
+	~Queue() 
+	{
 		// ?? lock a priori inutile, ne pas detruire si on travaille encore avec
-		for (size_t i = 0; i < sz; i++) {
+		for (size_t i = 0; i < sz; i++) 
+		{
 			auto ind = (begin + i) % allocsize;
 			delete tab[ind];
 		}
