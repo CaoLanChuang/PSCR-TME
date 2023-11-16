@@ -14,3 +14,10 @@ void randsleep() {
     tosleep = remain;
   }
 }
+
+
+//Q4
+//La boucle de la fonction randsleep garantit que le processus se met en pause pendant
+// toute la durée spécifiée, même lorsqu'un signal est reçu et interrompu.
+// Pour ce faire, elle vérifie la valeur de retour de nanosleep et d'errno,
+// puis rappelle nanosleep pour le reste du temps de pause.
