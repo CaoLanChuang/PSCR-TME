@@ -61,8 +61,12 @@ int main() {
                     // 子进程的子进程
                     j = 0;
                     std::cout << " k:j " << k << ":" << j << std::endl;
-                    return 0;  // 子进程的子进程结束
+                    exit(0);  // 子进程的子进程结束
                 }
+				else
+				{
+					wait(NULL);
+				}
             }
             return 0;  // 子进程结束
         } 
@@ -70,6 +74,7 @@ int main() {
 		{
             // 父进程增加子进程计数
             nb_fils++;
+			wait(NULL);
         }
     }
 
