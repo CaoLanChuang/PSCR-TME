@@ -74,10 +74,7 @@ int main() {
     }
 
     // 父进程等待所有直接子进程结束
-    for (int i = 0; i < nb_fils; i++) 
-	{
-        wait(NULL);
-    }
+    while(wait(NULL) != -1);
 
     std::cout << "Fin du processus père " << getpid() << std::endl;
     return 0;
