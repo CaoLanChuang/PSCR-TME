@@ -40,43 +40,49 @@
 // processus soient terminés. On n'attendra pas plus de fils qu'on en a crée et on ne limitera pas le
 // parallélisme.
 
-int main () {
-	const int N = 3;
-	int nb_fils = 0;
-	std::cout << "main pid=" << getpid() << std::endl;
+#include <iostream>
+#include <unistd.h>
+#include <sys/wait.h>
 
-	for (int i=1, j=N; i<=N && j==N ; i++ ) {
+int main() {
+    const int N = 3;
+    int nb_fils = 0;  // 用于跟踪创建的子进程数量
+    std::cout << "main pid=" << getpid() << std::endl;
 
-		if( fork()==0) nb_fils = 0;
-		else {
-			nb_fils++;
-			break;
-		}
-		std::cout << " i:j " << i << ":" << j << std::endl;
-		for (int k=1; k<=i && j==N ; k++) {
-			if (fork() == 0) {
-				nb_fils = 0;
-				j=0;
-				std::cout << " k:j " << k << ":" << j << std::endl;
-			}	else {
-				nb_fils++;
-			}
-		}
-	}
+    for (int i = 1, j = N; i <= N && j == N; i++) 
+	{
+        if (fork() == 0) {
+            // 子进程
+            std::cout << " i:j " << i << ":" << j << std::endl;
+            for (int k = 1; k <= i && j == N; k++) 
+			{
+                if (fork() == 0) 
+				{
+                    // 子进程的子进程
+                    j = 0;
+                    std::cout << " k:j " << k << ":" << j << std::endl;
+                    return 0;  // 子进程的子进程结束
+                }
+            }
+            return 0;  // 子进程结束
+        } 
+		else 
+		{
+            // 父进程增加子进程计数
+            nb_fils++;
+        }
+    }
 
-	// père
-	for(int i = 0; i < nb_fils; i++){
-		if (wait(NULL) == -1){
-			std::cout << "Trop de wait de" << getpid() << std::endl;
-		}
-	}
+    // 父进程等待所有直接子进程结束
+    for (int i = 0; i < nb_fils; i++) 
+	{
+        wait(NULL);
+    }
 
-	if(wait(NULL) != -1) 
-		std::cout << "il en reste" << std::endl;
-
-	std::cout << "Fin du processus " << getpid() << std::endl;
-	return 0;
+    std::cout << "Fin du processus père " << getpid() << std::endl;
+    return 0;
 }
+
 
 // TEST CORRECT
 // main pid=9086

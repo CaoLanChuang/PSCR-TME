@@ -43,6 +43,7 @@ namespace pr {
             while (isBlocking && empty()) {
                 cond_vide.wait(lg);
             }
+            
             if (empty()) {
                 return nullptr;
             }
