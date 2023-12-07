@@ -17,7 +17,6 @@ namespace pr {
         std::condition_variable cond_vide;
         std::condition_variable cond_plein;
         bool isBlocking;
-
         bool empty() const {
             return sz == 0;
         }

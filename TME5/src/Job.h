@@ -2,7 +2,10 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
-
+#include "Color.h"
+#include "Sphere.h"
+#include "Rayon.h"
+#include "Scene.h"
 
 using namespace std::chrono_literals;
 
@@ -92,3 +95,6 @@ namespace pr {
         }
     };
     }
+
+
+

@@ -20,7 +20,7 @@ using namespace pr;
 
 void fillScene(Scene & scene, default_random_engine & re) {
 	// Nombre de spheres (rend le probleme plus dur)
-	const int NBSPHERES = 250;
+	const int NBSPHERES = 150;
 
 	// on remplit la scene de spheres colorees de taille position et couleur aleatoire
 	uniform_int_distribution<int> distrib(0, 200);
@@ -32,8 +32,8 @@ void fillScene(Scene & scene, default_random_engine & re) {
 		scene.add(Sphere({50+distribd(re),50 + distribd(re),120 + distribd(re) }, double(distrib(re)%30) + 3.0, Color::random()));
 	}
 	// quelques spheres de plus pour ajouter du gout a la scene
-	scene.add(Sphere({50,50,40},15.0,Color::red));
-	scene.add(Sphere({100,20,50},55.0,Color::blue));
+	scene.add(Sphere({50,150,40},15.0,Color::red));
+	scene.add(Sphere({10,20,50},55.0,Color::blue));
 
 }
 
@@ -116,7 +116,7 @@ int main() {
 
     vector<Vec3D> lights;
     lights.reserve(3);
-    lights.emplace_back(Vec3D(50, 50, -50));
+    lights.emplace_back(Vec3D(150, 150, -150));
     lights.emplace_back(Vec3D(50, 50, 120));
     lights.emplace_back(Vec3D(200, 0, 120));
 
@@ -183,3 +183,4 @@ int main() {
     pool.stop();
     return 0;
 }
+

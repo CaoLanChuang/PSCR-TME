@@ -15,9 +15,15 @@ void randsleep() {
   }
 }
 
+// Q4 : Pour attendre une durée aléatoire dans ce scenario on propose la fonction suivante
+// randsleep suivante. En lisant le manuel de nanosleep https://man.cx/nanosleep, en particulier les
+// erreurs possibles, expliquez la boucle qui est proposée dans ce code.
 
-//Q4
-//La boucle de la fonction randsleep garantit que le processus se met en pause pendant
-// toute la durée spécifiée, même lorsqu'un signal est reçu et interrompu.
-// Pour ce faire, elle vérifie la valeur de retour de nanosleep et d'errno,
-// puis rappelle nanosleep pour le reste du temps de pause.
+// A4:  La boucle while dans cette fonction gère une situation où l'appel à nanosleep est interrompu par un signal 
+// avant que la période de sommeil spécifiée ne soit écoulée.
+
+
+// Q5: Comment assurer que les deux processus qui s'affrontent utilisent une graine aléatoire
+// différente ?
+
+// A5: On pose une graine avec srand, basée sur time(0) ou sur getpid.

@@ -43,7 +43,7 @@ public:
 			for (int y=0 ;  y < height ; y++) {
 				screen[y][x].x = x0 + x * W / width;
 				screen[y][x].y = y0 + y * H / height;
-				screen[y][x].y = screendepth;
+				screen[y][x].z = screendepth;
 			}
 		}
 	}
