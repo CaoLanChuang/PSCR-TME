@@ -6,9 +6,11 @@
 #include <iostream>
 
 
-void pr::Socket::connect(const std::string & host, int port){
+void pr::Socket::connect(const std::string & host, int port)
+{
     struct addrinfo* ai;
-    if(getaddrinfo(host.c_str(),NULL,NULL,&ai)!= 0){
+    if(getaddrinfo(host.c_str(),NULL,NULL,&ai)!= 0)
+	{
         perror("getaddrinfo");
         exit(1);
     }
@@ -18,9 +20,11 @@ void pr::Socket::connect(const std::string & host, int port){
     connect(addr,port);
 }
 
-void pr::Socket::connect(in_addr ipv4, int port){
+void pr::Socket::connect(in_addr ipv4, int port)
+{
     
-    if((fd = socket(AF_INET,SOCK_STREAM,IPPROTO_TCP)) == -1){
+    if((fd = socket(AF_INET,SOCK_STREAM,IPPROTO_TCP)) == -1)
+	{
         perror("socket");
         exit(2);
     }
@@ -31,7 +35,8 @@ void pr::Socket::connect(in_addr ipv4, int port){
 	addr.sin_port = htons(port);
 	addr.sin_addr = ipv4;
 
-	if(::connect(fd, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
+	if(::connect(fd, (struct sockaddr*)&addr, sizeof(addr)) == -1) 
+	{
 		perror("connect");
 		exit(3);
 	}
@@ -39,18 +44,22 @@ void pr::Socket::connect(in_addr ipv4, int port){
 
 
 
-void pr::Socket::close(){
-    if(isOpen()) {
+void pr::Socket::close()
+{
+    if(isOpen()) 
+	{
 		shutdown(fd, SHUT_RDWR);
 		::close(fd);
 	}
 }
 
 
-std::ostream & operator<< (std::ostream & os, struct sockaddr_in & addr){
+std::ostream & operator<< (std::ostream & os, struct sockaddr_in & addr)
+{
     char host[64];
 
-	if(getnameinfo((struct sockaddr*)&addr, sizeof(addr), host, sizeof(host), NULL, 0, 0) != 0) {
+	if(getnameinfo((struct sockaddr*)&addr, sizeof(addr), host, sizeof(host), NULL, 0, 0) != 0) 
+	{
 		perror("getnameinfo");
 		exit(1);
 	}

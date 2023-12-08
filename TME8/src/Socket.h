@@ -1,7 +1,7 @@
 #ifndef SRC_SOCKET_H_
 #define SRC_SOCKET_H_
 
-#include <winsock2.h>
+#include <netinet/ip.h>
 #include <string>
 #include <iosfwd>
 
@@ -20,8 +20,15 @@ namespace pr
 		void connect(const std::string & host, int port);
 		void connect(in_addr ipv4, int port);
 
-		bool isOpen() const {return fd != -1;}
-		int getFD() { return fd ;}
+		bool isOpen() const 
+		{
+			return fd != -1;
+		}
+		
+		int getFD() 
+		{ 
+			return fd ;
+		}
 
 		void close();
 	};
