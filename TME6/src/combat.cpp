@@ -67,18 +67,7 @@ int main() {
 
 // Question 6. Le combat est-il encore équitable ? Expliquez pourquoi.
 /*  A6:
-    Variable Globale Partagée : Chaque processus a sa propre copie de la variable vie post-fork,
-     ce qui signifie qu'il n'y a pas de véritable interaction entre les adversaires, mais deux combats séparés avec un compteur.
-
-    Gestion des Signaux : La réinitialisation répétée des gestionnaires de signaux entre l'attaque et la défense peut 
-     conduire à une complexité accrue et à des comportements inattendus si les signaux sont envoyés pendant une période d'ignorance temporaire.
-
-    Synchronisation : L'absence de synchronisation entre les processus peut entraîner des attaques et des défenses désordonnées,
-     sans garantie d'alternance stricte, affectant l'équité du combat.
-
-    Initialisation du générateur de nombres aléatoires : L'initialisation de srand avec pid peut conduire à des séquences de nombres
-     aléatoires très similaires entre les processus, affectant la randomisation des délais entre l'attaque et la défense.
-
-    Terminaison : Un processus qui perd ne notifie pas l'autre processus de sa défaite, laissant l'autre processus dans une boucle indéfinie,
-     tentant d'attaquer un processus qui n'existe plus.
+    Je pense que c'est juste, même si gagner ou perdre dépend en grande partie de la composante chance, 
+    mais la soi-disant « chance » est randomisée par la valeur de leur pid, qui à son tour est attribuée aléatoirement. 
+    Donc dans l'ensemble c'est juste.
 */
