@@ -17,7 +17,7 @@
 using namespace std;
 using namespace pr;
 
-
+//填充场景(Scene)对象，随机生成一定数量的球体(Sphere)并添加到场景中。
 void fillScene(Scene & scene, default_random_engine & re) {
 	// Nombre de spheres (rend le probleme plus dur)
 	const int NBSPHERES = 150;
@@ -39,6 +39,7 @@ void fillScene(Scene & scene, default_random_engine & re) {
 
 // return the index of the closest object in the scene that intersects "ray"
 // or -1 if the ray does not intersect any object.
+//确定给定光线(Rayon)与场景中哪个物体最先相交，返回该物体的索引或在无交点时返回-1。
 int pr::findClosestInter(const Scene & scene, const Rayon & ray) {
 	auto minz = std::numeric_limits<float>::max();
 	int targetSphere = -1;
@@ -58,6 +59,7 @@ int pr::findClosestInter(const Scene & scene, const Rayon & ray) {
 
 // Calcule l'angle d'incidence du rayon à la sphere, cumule l'éclairage des lumières
 // En déduit la couleur d'un pixel de l'écran.
+//计算给定光线与物体交点处的颜色，考虑光源的影响。
 Color pr::computeColor(const Sphere & obj, const Rayon & ray, const Vec3D & camera, std::vector<Vec3D> & lights) {
 	Color finalcolor = obj.getColor();
 
@@ -87,6 +89,7 @@ Color pr::computeColor(const Sphere & obj, const Rayon & ray, const Vec3D & came
 }
 
 // produit une image dans path, représentant les pixels.
+//将渲染结果输出到PPM格式的图像文件中。
 void exportImage(const char * path, size_t width, size_t height, Color * pixels) {
 	// ppm est un format ultra basique
 	ofstream img (path);
@@ -109,19 +112,20 @@ void exportImage(const char * path, size_t width, size_t height, Color * pixels)
 // pas d'accents pour eviter les soucis d'encodage
 
 int main() {
+	//初始化场景、光源、渲染时间计时器。
     std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
     default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
-    Scene scene(1000, 1000);
-    fillScene(scene, re);
+    Scene scene(1000, 1000);//创建一个分辨率为1000x1000的场景。
+    fillScene(scene, re);//用随机生成的球体填充场景。
 
-    vector<Vec3D> lights;
+    vector<Vec3D> lights;//初始化光源并存储在一个std::vector<Vec3D>中
     lights.reserve(3);
     lights.emplace_back(Vec3D(150, 150, -150));
     lights.emplace_back(Vec3D(50, 50, 120));
     lights.emplace_back(Vec3D(200, 0, 120));
 
     const Scene::screen_t& screen = scene.getScreenPoints();
-    Color* pixels = new Color[scene.getWidth() * scene.getHeight()];
+    Color* pixels = new Color[scene.getWidth() * scene.getHeight()];//创建颜色数组pixels，用于存储渲染结果。
 
 //    // pour chaque pixel, calculer sa couleur
 //    for (int x =0 ; x < scene.getWidth() ; x++) {
@@ -150,11 +154,11 @@ int main() {
 //    }
 
 
-    pr::Pool pool(100);
+    pr::Pool pool(100);//创建并启动线程池(pr::Pool)。
     pool.start(20);
 
 
-//    Ex9
+//    Ex9//每个像素分配一个任务
 //    for (int x = 0; x < scene.getWidth(); x++) {
 //        for (int y = 0; y < scene.getHeight(); y++) {
 //            Color* pixel = &pixels[y * scene.getHeight() + x];
@@ -164,7 +168,7 @@ int main() {
 //    }
 
 
-//      Ex10
+//      Ex10//每行像素分配一个任务
     for (int y = 0; y < scene.getHeight(); y++) {
         Color* rowPixels = &pixels[y * scene.getWidth()];
         pr::RowJob* job = new pr::RowJob(y, rowPixels, &scene, &lights);
@@ -173,14 +177,14 @@ int main() {
 
 
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-    std::cout << "Total time "
+    std::cout << "Total time "//计算渲染总时间并输出
               << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()
               << "ms.\n";
 
-    exportImage("toto.ppm", scene.getWidth(), scene.getHeight(), pixels);
+    exportImage("toto.ppm", scene.getWidth(), scene.getHeight(), pixels);//导出渲染图像到PPM文件
 
 
-    pool.stop();
+    pool.stop();//停止线程池
     return 0;
 }
 
