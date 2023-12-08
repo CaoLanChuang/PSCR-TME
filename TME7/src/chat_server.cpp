@@ -16,10 +16,13 @@ int clientCount = 0;
 struct message *sharedMsg;
 
 
-void broadcastMessage(){
+void broadcastMessage()
+{
     cout << "Broadcasting message: " << sharedMsg->content << endl;
-    for(int i = 0; i < CLIENT_LIMIT; i++){
-        if(clientList[i] != nullptr){
+    for(int i = 0; i < CLIENT_LIMIT; i++)
+    {
+        if(clientList[i] != nullptr)
+        {
             int fileDescriptor = shm_open(clientList[i], O_RDWR, 0600);
             ftruncate(fileDescriptor, BUFFER_SIZE);
             void *sharedMem = mmap(0, BUFFER_SIZE, PROT_WRITE | PROT_READ, MAP_SHARED, fileDescriptor, 0);
@@ -34,7 +37,8 @@ void broadcastMessage(){
     }
 }
 
-int main(int argc, char** argv){
+int main(int argc, char** argv)
+{
 
     sem_init(&syncMutex, -1, 1);
     const char* serverID = (argc > 1) ? argv[1] : SERVER_NAME_DEFAULT;
@@ -53,13 +57,16 @@ int main(int argc, char** argv){
     serverSharedMem.sem = sem_open(serverID, O_CREAT | O_EXCL | O_RDWR, 0600, 0);
 
     // Main loop
-    while(true){
+    while(true)
+    {
         sem_wait(serverSharedMem.sem);
         cout << "Processing type: " << sharedMsg->type << endl;
         if(sharedMsg->type == 1){ // Connection
             sem_wait(&syncMutex);
-            for(int i = 0; i < CLIENT_LIMIT; i++){
-                if(clientList[i] == nullptr){
+            for(int i = 0; i < CLIENT_LIMIT; i++)
+            {
+                if(clientList[i] == nullptr)
+                {
                     clientList[i] = new char[strlen(sharedMsg->content)];
                     strcpy(clientList[i], sharedMsg->content);
                     clientCount++;
@@ -67,11 +74,16 @@ int main(int argc, char** argv){
                 }
             }
             sem_post(&syncMutex);
-        } else if(sharedMsg->type == 2){ // Message broadcast
+        } 
+        else if(sharedMsg->type == 2)
+        { // Message broadcast
             broadcastMessage();
-        } else if(sharedMsg->type == 3){ // Disconnection
+        } 
+        else if(sharedMsg->type == 3)
+        { // Disconnection
             sem_wait(&syncMutex);
-            for(int i = 0; i < CLIENT_LIMIT; i++){
+            for(int i = 0; i < CLIENT_LIMIT; i++)
+            {
                 if(clientList[i] != nullptr && (strcmp(clientList[i], sharedMsg->content) == 0)){
                     delete[] clientList[i];
                     clientList[i] = nullptr;
@@ -79,11 +91,16 @@ int main(int argc, char** argv){
                 }
             }
             sem_post(&syncMutex);
-        } else {
+        } 
+        else 
+        {
             cout << "Other type" << endl;
         }
-        for(int i = 0; i < clientCount; i++){
-            if(clientList[i] != nullptr){
+        
+        for(int i = 0; i < clientCount; i++)
+        {
+            if(clientList[i] != nullptr)
+            {
                 cout << "Client: " << clientList[i] << endl;
             }
         }

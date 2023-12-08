@@ -29,12 +29,15 @@ int task_index = 0; // Index to keep track of the next character to be processed
 
 atomic<bool> exit_flag(false); // Global exit flag for threads
 
-void producteur(int id, int M) {
-    while (true) {
+void producteur(int id, int M) 
+{
+    while (true) 
+    {
         unique_lock<mutex> lock(mtx);
         cv_producer.wait(lock, [id, M]{ return (task_index % M == id) || exit_flag; });
 
-        if (exit_flag || task_index >= tache.length()) {
+        if (exit_flag || task_index >= tache.length()) 
+        {
             break;
         }
 
@@ -46,12 +49,15 @@ void producteur(int id, int M) {
     }
 }
 
-void consomateur(int id) {
-    while (true) {
+void consomateur(int id) 
+{
+    while (true) 
+    {
         unique_lock<mutex> lock(mtx);
         cv_consumer.wait(lock, []{ return s->getSz() > 0 || exit_flag; });
 
-        if (exit_flag || (task_index >= tache.length() && s->getSz() == 0)) {
+        if (exit_flag || (task_index >= tache.length() && s->getSz() == 0)) 
+        {
             break;
         }
 
@@ -64,8 +70,10 @@ void consomateur(int id) {
     }
 }
 
-void signal_handler(int signal) {
-    if (signal == SIGINT) {
+void signal_handler(int signal) 
+{
+    if (signal == SIGINT) 
+    {
         cout << "\n********terminer proprement***********\n" << endl;
         exit_flag = true; // Set the exit flag for all threads
         cv_producer.notify_all(); 
@@ -73,7 +81,8 @@ void signal_handler(int signal) {
     }
 }
 
-int main() {
+int main() 
+{
 
 	signal(SIGINT, signal_handler);
 
@@ -98,18 +107,23 @@ int main() {
     vector<thread> producers;
     vector<thread> consumers;
 
-    for (int i = 0; i < M; ++i) {
+    for (int i = 0; i < M; ++i) 
+    {
         producers.push_back(thread(producteur, i, M));
     }
 
-    for (int i = 0; i < N; ++i) {
+    for (int i = 0; i < N; ++i) 
+    {
         consumers.push_back(thread(consomateur, i));
     }
 
-    for (auto& th : producers) {
+    for (auto& th : producers) 
+    {
         th.join();
     }
-    for (auto& th : consumers) {
+
+    for (auto& th : consumers) 
+    {
         th.join();
     }
 

@@ -27,12 +27,14 @@
 #define MAX_USERS 10
 #define TAILLE_MESS 1024
 
-struct message {
+struct message 
+{
   long type;
   char content[TAILLE_MESS];
 };
 
-struct myshm {
+struct myshm 
+{
   int read; /* nombre de messages retransmis par le serveur */
   int write; /* nombre de messages non encore retransmis par le serveur */
   int nb; /* nombre total de messages emis */

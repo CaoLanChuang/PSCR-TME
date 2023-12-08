@@ -31,13 +31,15 @@ vector<thread> threadPool;
 struct message *connectMsg;
 struct message *disconnectMsg;
 
-void sendMessage(struct message *m) {
+void sendMessage(struct message *m) 
+{
     sharedMsg->type = m->type;
     strncpy(sharedMsg->content, m->content, BUFFER_SIZE);
     sem_post(serverSem);
 }
 
-void readMessage() {
+void readMessage() 
+{
     sem_unlink(clientName);
     clientSem = sem_open(clientName, O_CREAT | O_EXCL | O_RDWR, 0600, 0);
 
@@ -47,9 +49,11 @@ void readMessage() {
     sharedMemoryPtr = mmap(0, BUFFER_SIZE, PROT_WRITE | PROT_READ, MAP_SHARED, sharedContentFD, 0);
     sharedContent = new(sharedMemoryPtr) char();
 
-    while (isRunning) {
+    while (isRunning) 
+    {
         sem_wait(clientSem);
-        if (!isRunning) {
+        if (!isRunning) 
+        {
             break;
         }
         cout << "Broadcasted message: " << sharedContent << endl;
