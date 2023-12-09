@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
     // Construire deux tableaux d'arguments
     // 创建vector来存储两个参数
     std::vector<const char*> cmd1(new_argv + 1, new_argv + pipeIndex);          //“|”前的第一个命令
-    std::vector<const char*> cmd2(new_argv + pipeIndex + 1, new_argv + argc);   //“|”后的第二个命令  
+    std::vector<const char*> cmd2(new_argv + pipeIndex + 1, new_argv + new_argc);   //“|”后的第二个命令  
     cmd1.push_back(nullptr);
     cmd2.push_back(nullptr);
 
