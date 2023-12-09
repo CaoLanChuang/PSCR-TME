@@ -9,14 +9,15 @@
 
 static int vie = 10;
 
-void handler (int sig){
+void handler (int sig)          //用来处理SIGUSR1信号。每次收到信号，vie减1并打印当前生命值。当vie为0时，程序打印消息并退出。
+{
     if(sig == SIGUSR1)
     {
         vie--;
-        printf("on a été attaqué, j'ai la vie: %d pour l'instant\n",vie);
+        printf("Attaque reçue par %d; PV restants %d\n",getpid(), vie);
         if(vie == 0)
         {
-            printf("on a plus de vie, on a perdu\n");
+            printf("Plus de vie pour %d; mort du processus.\n", getpid());
             exit(1);
         }
     }
@@ -25,14 +26,20 @@ void handler (int sig){
 void attaque(pid_t adversaure)  //发送SIGUSR1信号给对手(即攻击对方)，并随机休眠一段时间，adversaure是对手的pid
 {
     signal(SIGUSR1,handler);
-    kill(adversaure,SIGUSR1)
+    if (kill(adversaure,SIGUSR1) < 0)
+    {
+        printf("Detection de Mort de l’adversaire de pid=%d \n", adversaure);
+        exit(0);
+    } 
     randsleep();
 }
 
 void defense()      //忽略对方发来的SIGUSR1(即忽视一次攻击)，然后随机睡眠
 {
-    signal(SIGUSR1,SIG_IGN);
+    signal(SIGUSR1,handler);
     randsleep();
+    // Re-ignore the signal after the sleep
+    signal(SIGUSR1, SIG_IGN);
 }
 
 void combat(pid_t adversaire)   //在攻击和防御之间循环
@@ -41,6 +48,7 @@ void combat(pid_t adversaire)   //在攻击和防御之间循环
     {
         defense();
         attaque(adversaire);
+        
     }
 }
 
