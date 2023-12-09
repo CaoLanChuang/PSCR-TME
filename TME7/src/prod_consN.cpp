@@ -27,6 +27,8 @@ string tache;       // 共享任务
 int shm_id;         // 共享内存的标识符
 int task_index = 0; // 任务索引
 
+const char* shm_name;   //共享内存的名称
+
 atomic<bool> exit_flag(false); // 全局退出标志
 
 void producteur(int id, int M)  //生产者
