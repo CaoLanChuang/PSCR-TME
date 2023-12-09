@@ -12,7 +12,9 @@ namespace pr
             T tab [STACKSIZE];
             size_t sz;
             int semid;
-            sembuf p_lock[2], v_unlock[2];
+            //sembuf p_lock[2], v_unlock[2];
+            sembuf p_lock[2] = {{0, -1, 0}, {1, -1, 0}}; // 初始化 p_lock
+            sembuf v_unlock[2] = {{0, 1, 0}, {1, 1, 0}}; // 初始化 v_unlock
 
         public :
             Stack() : sz(0) 
@@ -24,11 +26,13 @@ namespace pr
                 semctl(semid, 0, SETVAL, 1); // Mutex
                 semctl(semid, 1, SETVAL, STACKSIZE); // Items
 
+                /*
                 // Initialisation des opérations de semaphore
                 p_lock[0] = {0, -1, 0}; // Lock Mutex
                 p_lock[1] = {1, -1, 0}; // Decrement Items
                 v_unlock[0] = {0, 1, 0}; // Unlock Mutex
                 v_unlock[1] = {1, 1, 0}; // Increment Items
+                */
             }
 
             T pop() 
