@@ -18,8 +18,8 @@ void transaction(pr::Banque& banque, int id)
 		int cred, deb, val;
 		do
 		{
-			cred = (rand() % (banque.size()-1));
-			deb = (rand() % (banque.size()-1));
+			cred = (rand() % (banque.size()));
+			deb = (rand() % (banque.size()));
 		} while (cred == deb);
 		
 
