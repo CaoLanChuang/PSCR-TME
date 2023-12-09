@@ -11,8 +11,8 @@
 
 #include <sys/ipc.h>
 #include <sys/mman.h>
-#include <sys/stat.h>        /* Pour les constantes des modes */
-#include <fcntl.h>           /* Pour les constantes O_* */
+#include <sys/stat.h>        // For mode constants
+#include <fcntl.h>           // For O_* constants
 #include <semaphore.h>
 #include <signal.h>
 #include <sys/time.h>
@@ -22,10 +22,22 @@
 #include <errno.h>
 
 #include <string.h>
+#include <string>
+#include <stdexcept>
+
+#include <string.h>
 
 #define MAX_MESS 50
 #define MAX_USERS 10
 #define TAILLE_MESS 1024
+
+#define SHM_NAME "/chat_shm"
+#define SEM_NAME "/chat_sem"
+
+// Message types
+#define MSG_CONNECT 1
+#define MSG_DISCONNECT 2
+#define MSG_BROADCAST 3
 
 struct message 
 {
@@ -35,13 +47,16 @@ struct message
 
 struct myshm 
 {
-  int read; /* nombre de messages retransmis par le serveur */
-  int write; /* nombre de messages non encore retransmis par le serveur */
-  int nb; /* nombre total de messages emis */
+  int read;   /* 服务器重传的消息数 */
+  int write;  /* 服务器尚未重传的消息数 */
+  int nb;     /* 已发送消息总数 */
   sem_t *sem;
   struct message messages[MAX_MESS];
 };
 
 char *getName(char *name);
+
+
+
 
 #endif
