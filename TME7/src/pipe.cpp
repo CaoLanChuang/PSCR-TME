@@ -9,17 +9,22 @@
 // Question 1 Fork,exec,pipe
 int main(int argc, char* argv[])
 {
+     // 定义 argv
+    const char* new_argv[] = {"/bin/cat", "pipe.cpp", "|", "/bin/wc", "-l", nullptr};
+    int argc = 6; // 更新 argc 的值
+
     if(argc < 3)        //如果参数小于3，直接报错
     {
         std::cerr << "Usage: " << argv[0] << " command1 | command2" << std::endl;
         return 1;
     }
+    
 
     // Trouver l'index du pipe '|' dans argv
     int pipeIndex = -1;     //寻找“|”这个符号的位置
     for(int i = 1; i < argc; ++i) 
     {
-        if(std::string(argv[i]) == "|") 
+        if(std::string(new_argv[i]) == "|") 
         {
             pipeIndex = i;
             break;          //找到之后直接跳出循环进行下一步
@@ -34,8 +39,8 @@ int main(int argc, char* argv[])
 
     // Construire deux tableaux d'arguments
     // 创建vector来存储两个参数
-    std::vector<const char*> cmd1(argv + 1, argv + pipeIndex);          //“|”前的第一个命令
-    std::vector<const char*> cmd2(argv + pipeIndex + 1, argv + argc);   //“|”后的第二个命令  
+    std::vector<const char*> cmd1(new_argv + 1, new_argv + pipeIndex);          //“|”前的第一个命令
+    std::vector<const char*> cmd2(new_argv + pipeIndex + 1, new_argv + argc);   //“|”后的第二个命令  
     cmd1.push_back(nullptr);
     cmd2.push_back(nullptr);
 
