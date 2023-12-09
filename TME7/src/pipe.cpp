@@ -11,9 +11,9 @@ int main(int argc, char* argv[])
 {
      // 定义 argv
     const char* new_argv[] = {"/bin/cat", "pipe.cpp", "|", "/bin/wc", "-l", nullptr};
-    int argc = 6; // 更新 argc 的值
+    int new_argc = 6; // 更新 argc 的值
 
-    if(argc < 3)        //如果参数小于3，直接报错
+    if(new_argc < 3)        //如果参数小于3，直接报错
     {
         std::cerr << "Usage: " << argv[0] << " command1 | command2" << std::endl;
         return 1;
@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 
     // Trouver l'index du pipe '|' dans argv
     int pipeIndex = -1;     //寻找“|”这个符号的位置
-    for(int i = 1; i < argc; ++i) 
+    for(int i = 1; i < new_argc; ++i) 
     {
         if(std::string(new_argv[i]) == "|") 
         {
