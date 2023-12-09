@@ -11,7 +11,7 @@
 #include "Queue.h"
 #include "Job.h"
 #include "Pool.h"
-#include " Barrier.h"
+#include "Barrier.h"
 
 
 using namespace std;
