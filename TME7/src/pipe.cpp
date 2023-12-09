@@ -5,12 +5,12 @@
 #include <vector>
 #include <iostream>
 
-/*
+
 // Question 1 Fork,exec,pipe
 int main(int argc, char* argv[])
 {
      // 定义 argv
-    const char* new_argv[] = {"/bin/cat", "pipe.cpp", "|", "/bin/wc", "-l", nullptr};
+    const char* new_argv[] = {"cat", "pipe.cpp", "|", "wc", "-l", nullptr};
     int new_argc = 6; // 更新 argc 的值
 
     if(new_argc < 3)        //如果参数小于3，直接报错
@@ -73,65 +73,7 @@ int main(int argc, char* argv[])
     waitpid(pid, NULL, 0);      //等待子进程结束
     return 0;
 }
-*/
 
-
-int main(int argc, char *argv[]) {
-    int pipefd[2];
-    pid_t pid;
-    int pipeIndex;
-
-    const char* new_argv[] = {"/bin/cat", "pipe.cpp", "|", "/bin/wc", "-l", nullptr};
-    int new_argc = 6; // 更新 argc 的值
-
-    // 查找管道符号'|'并记录其位置
-    for (pipeIndex = 1; pipeIndex < new_argc; pipeIndex++) {
-        if (strcmp(new_argv[pipeIndex], "|") == 0) {
-            new_argv[pipeIndex] = NULL;
-            break;
-        }
-    }
-
-    // 创建管道
-    if (pipe(pipefd) == -1) {
-        perror("pipe");
-        exit(EXIT_FAILURE);
-    }
-
-    // 创建子进程
-    pid = fork();
-    if (pid == -1) {
-        perror("fork");
-        exit(EXIT_FAILURE);
-    }
-
-    if (pid == 0) {
-        // 子进程
-        close(pipefd[0]); // 关闭读端
-        dup2(pipefd[1], STDOUT_FILENO); // 将标准输出重定向到管道的写端
-        close(pipefd[1]);
-
-        // 执行第一个命令
-        execv(new_argv[1], &new_argv[1]);
-        perror("execv");
-        exit(EXIT_FAILURE);
-    } else {
-        // 父进程
-        close(pipefd[1]); // 关闭写端
-        dup2(pipefd[0], STDIN_FILENO); // 将标准输入重定向到管道的读端
-        close(pipefd[0]);
-
-        // 等待子进程结束
-        wait(NULL);
-
-        // 执行第二个命令
-        execv(new_argv[pipeIndex + 1], &new_argv[pipeIndex + 1]);
-        perror("execv");
-        exit(EXIT_FAILURE);
-    }
-
-    return 0;
-}
 
 
 /*
