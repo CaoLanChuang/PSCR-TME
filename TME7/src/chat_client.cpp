@@ -60,13 +60,16 @@ void readMessage()
     }
 }
 
-void writeMessage() {
+void writeMessage() 
+{
     struct message *outgoingMsg = new struct message;
     outgoingMsg->type = 2; // message broadcast
 
-    while (isRunning) {
+    while (isRunning) 
+    {
         cin.getline(outgoingMsg->content, BUFFER_SIZE);
-        if (!isRunning) {
+        if (!isRunning) 
+        {
             break;
         }
         sendMessage(outgoingMsg);
@@ -75,21 +78,42 @@ void writeMessage() {
 }
 
 bool sigIntHandled = false;
-void terminateClient(int signal) {
-    if (!sigIntHandled) {
+
+
+void terminateClient(int signal) 
+{
+    if (!sigIntHandled) 
+    {
         isRunning = false;
+        // 唤醒可能在 sem_wait 的线程
         sem_post(clientSem);
+        sem_post(serverSem);
+
+        // 等待线程结束
+        for (auto &t : threadPool) 
+        {
+            if (t.joinable()) 
+            {
+                t.join();
+            }
+        }
+
+        // 清理资源
+        sendMessage(disconnectMsg);
+        munmap(sharedMemoryPtr, sizeof(struct message));
         close(sharedMemoryFD);
         close(sharedContentFD);
-        sendMessage(disconnectMsg);
         shm_unlink(clientName);
         sem_unlink(clientName);
-        munmap(sharedMemoryPtr, sizeof(struct message));
+        delete connectMsg;
+        delete disconnectMsg;
+
         sigIntHandled = true;
     }
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv) 
+{
     signal(SIGINT, terminateClient);
     clientName = (argc > 1) ? argv[1] : CLIENT_NAME_DEFAULT;
     serverName = (argc > 2) ? argv[2] : SERVER_NAME_DEFAULT;
@@ -115,7 +139,8 @@ int main(int argc, char **argv) {
 
     threadPool.emplace_back(readMessage);
     threadPool.emplace_back(writeMessage);
-    for (auto &t : threadPool) {
+    for (auto &t : threadPool) 
+    {
         t.join();
     }
 
