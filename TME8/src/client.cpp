@@ -4,7 +4,8 @@
 #include <string>
 
 
-int main00() {
+int main00() {//连接到名为"localhost"的服务器的1664端口，然后向服务器发送一个整数42，接着从服务器接收一个整数并打印出来。
+//在这个函数中，没有进行错误处理
 	pr::Socket sock;
 	sock.connect("localhost", 1664);
 	int N=42;
@@ -16,7 +17,7 @@ int main00() {
 
 
 // avec controle
-int main0() {
+int main0() {//在写入数据和读取数据时，通过检查返回值来处理错误
 
 	pr::Socket sock;
 
@@ -35,7 +36,7 @@ int main0() {
 		if (nblu == 0) {
 			std::cout << "Fin connexion par serveur" << std::endl;
 		} else if (nblu < msz) {
-			perror("read");
+			perror("read");//使用perror函数打印出错误消息。
 		}
 		std::cout << "lu =" << lu << std::endl;
 	}
@@ -55,8 +56,8 @@ int main() {
 		int fd = sock.getFD();
 
 		ssize_t msz = sizeof(int);
-		for (int i = 10; i >= 0; i--) {
-			if (write(fd, &i, msz) < msz) {
+		for (int i = 10; i >= 0; i--) {//循环中多次发送整数（从10到0）
+			if (write(fd, &i, msz) < msz) {//接收来自服务器的响应整数，并在每次发送和接收后进行错误检查和处理
 				perror("write");
 				break;
 			}
