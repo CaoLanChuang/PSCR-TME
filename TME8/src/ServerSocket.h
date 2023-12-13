@@ -5,20 +5,20 @@
 
 namespace pr {
 
-	class ServerSocket {
-		int socketfd;
+class ServerSocket {
+	int socketfd;
 
-	public :
-		// Demarre l'ecoute sur le port donne
-		ServerSocket(int port);
+public :
+	// Demarre l'ecoute sur le port donne
+	ServerSocket(int port);
 
-		int getFD() { return socketfd;}
-		bool isOpen() const {return socketfd != -1;}
+	int getFD() { return socketfd;}
+	bool isOpen() const {return socketfd != -1;}
 
-		Socket accept();
+	Socket accept();
 
-		void close();
-	};
+	void close();
+};
 
 } // ns pr
 #endif /* SRC_SERVERSOCKET_H_ */
