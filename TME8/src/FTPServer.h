@@ -37,12 +37,6 @@
 
 class FTPServer {
 
-
-
-
-
-
-
 };
 
 #endif /* FTPSERVER_H_ */
