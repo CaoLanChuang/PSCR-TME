@@ -47,9 +47,9 @@ struct message
 
 struct myshm 
 {
-  int read;   /* 服务器重传的消息数 */
-  int write;  /* 服务器尚未重传的消息数 */
-  int nb;     /* 已发送消息总数 */
+  int read;     /* 服务器重传的消息数 */
+  int write;    /* 服务器尚未重传的消息数 */
+  int nb;       /* 已发送消息总数 */
   sem_t *sem;
   struct message messages[MAX_MESS];
 };

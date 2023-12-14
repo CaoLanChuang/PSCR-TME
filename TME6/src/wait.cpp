@@ -10,16 +10,19 @@ volatile sig_atomic_t child_terminated = 0;
 volatile sig_atomic_t timeout = 0;
 
 // SIGALRM的处理器
-void alarm_handler(int sig) {
+void alarm_handler(int sig) 
+{
     timeout = 1;
 }
 
 // SIGCHLD的处理器
-void child_handler(int sig) {
+void child_handler(int sig) 
+{
     child_terminated = 1;
 }
 
-int wait_till_pid(pid_t pid, int sec) {
+int wait_till_pid(pid_t pid, int sec) 
+{
     struct sigaction sa;
 
     // 设置SIGALRM的处理器
@@ -34,8 +37,10 @@ int wait_till_pid(pid_t pid, int sec) {
 
     alarm(sec); // sec倒计时结束后触发ALRM信号
 
-    while (true) {
-        if (timeout) {  // 如果闹钟信号被触发了
+    while (true) 
+    {
+        if (timeout) 
+        {  // 如果闹钟信号被触发了
             return 0;  // 超时返回0
         }
 

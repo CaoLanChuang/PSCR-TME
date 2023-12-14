@@ -112,17 +112,17 @@ int main()
     vector<thread> producers;
     vector<thread> consumers;
 
-    for (int i = 0; i < M; ++i) 
+    for (int i = 0; i < M; ++i)                 //将生产加入运行队列
     {
         producers.push_back(thread(producteur, i, M));
     }
 
-    for (int i = 0; i < N; ++i) 
+    for (int i = 0; i < N; ++i)                 //将消费加入运行队列
     {
         consumers.push_back(thread(consomateur, i));
     }
 
-    for (auto& th : producers) 
+    for (auto& th : producers)                  
     {
         th.join();
     }

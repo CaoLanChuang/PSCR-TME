@@ -56,7 +56,7 @@ void readMessage()
         {
             break;
         }
-        cout << "Broadcasted message: " << sharedContent << endl;
+        cout << clientName << " message: " << sharedContent << endl;
     }
 }
 

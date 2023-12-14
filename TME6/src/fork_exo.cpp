@@ -40,10 +40,6 @@
 // processus soient terminés. On n'attendra pas plus de fils qu'on en a crée et on ne limitera pas le
 // parallélisme.
 
-#include <iostream>
-#include <unistd.h>
-#include <sys/wait.h>
-
 int main() {
     const int N = 3;
     int nb_fils = 0;  // 用于跟踪创建的子进程数量
@@ -51,7 +47,8 @@ int main() {
 
     for (int i = 1, j = N; i <= N && j == N; i++) 
 	{
-        if (fork() == 0) {
+        if (fork() == 0) 
+        {
             // 子进程
             std::cout << " i:j " << i << ":" << j << std::endl;
             for (int k = 1; k <= i && j == N; k++) 
