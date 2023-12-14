@@ -4,20 +4,20 @@
 #include <string>
 
 
-int main00() {//连接到名为"localhost"的服务器的1664端口，然后向服务器发送一个整数42，接着从服务器接收一个整数并打印出来。
+int main00() {
 //在这个函数中，没有进行错误处理
 	pr::Socket sock;
-	sock.connect("localhost", 1664);
+	sock.connect("localhost", 1664);//连接到名为"localhost"的服务器的1664端口
 	int N=42;
-	write(sock.getFD(),&N,sizeof(int));
-	read(sock.getFD(),&N,sizeof(int));
+	write(sock.getFD(),&N,sizeof(int));//向服务器发送一个整数42
+	read(sock.getFD(),&N,sizeof(int));//从服务器接收一个整数并打印出来
 	std::cout << N << std::endl;
 	return 0;
 }
 
 
 // avec controle
-int main0() {//在写入数据和读取数据时，通过检查返回值来处理错误
+int main0() {
 
 	pr::Socket sock;
 
@@ -27,7 +27,7 @@ int main0() {//在写入数据和读取数据时，通过检查返回值来处�
 		int fd = sock.getFD();
 		int i = 10;
 		ssize_t msz = sizeof(int);
-		if (write(fd, &i, msz) < msz) {
+		if (write(fd, &i, msz) < msz) {//在写入数据和读取数据时，通过检查返回值来处理错误
 			perror("write");
 		}
 		std::cout << "envoyé =" << i << std::endl;
