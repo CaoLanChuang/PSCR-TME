@@ -86,24 +86,3 @@ int main() {
 }
 
 
-// TEST CORRECT
-// main pid=9086
-//  i:j 1:3
-//  k:j 1:0
-// Fin du processus 9088
-//  i:j 2:3
-//  k:j 1:0
-// Fin du processus 9090
-//  k:j 2:0
-// Fin du processus 9091
-//  i:j 3:3
-//  k:j 1:0
-// Fin du processus 9093
-//  k:j 2:0
-// Fin du processus 9094
-//  k:j 3:0
-// Fin du processus 9095
-// Fin du processus 9092
-// Fin du processus 9089
-// Fin du processus 9087 
-// Fin du processus 9086

@@ -12,9 +12,9 @@ using namespace std::chrono_literals;
 //通过多线程处理，这个程序能够更快地渲染复杂场景，特别是在有大量像素需要计算时。
 
 namespace pr {
-	//用于找到与光线相交的最近物体（球体）。
+	        //用于找到与光线相交的最近物体（球体）。
     extern int findClosestInter(const Scene & scene, const Rayon & ray);
-	//计算光线与物体相交处的颜色。
+	        //计算光线与物体相交处的颜色。
     extern Color computeColor(const Sphere & obj, const Rayon & ray, const Vec3D & camera, std::vector<Vec3D> & lights);
 
 
@@ -82,7 +82,7 @@ namespace pr {
         RowJob(int y, Color* rowPixels, Scene* scene, std::vector<Vec3D>* lights)
                 : y(y), rowPixels(rowPixels), scene(scene), lights(lights) {}
 
-        void run() override {//函数遍历一行中的所有像素，为每个像素调用类似于PixelJob的逻辑。
+        void run() override {               //函数遍历一行中的所有像素，为每个像素调用类似于PixelJob的逻辑。
             for (int x = 0; x < scene->getWidth(); x++) {
                 Color* pixel = &rowPixels[x];
                 auto &screenPoint = scene->getScreenPoints()[y][x];
